@@ -4,6 +4,7 @@ import { bucketTasks, todayStr, addDays, prettyDate, computeStats } from './task
 import TaskCard from './components/TaskCard.jsx';
 import AddTaskForm from './components/AddTaskForm.jsx';
 import Stats from './components/Stats.jsx';
+import BackupRestore from './components/BackupRestore.jsx';
 
 const VIEWS = [
   { id: 'today', label: 'Today' },
@@ -188,6 +189,15 @@ export default function App() {
                 </p>
               </div>
             )}
+
+            <section className="data-vault" aria-label="Backup and restore">
+              <h3 className="sub-title">Data vault</h3>
+              <p className="hint-line">
+                Your tasks live only in this browser. Download a backup file now and
+                then; importing one replaces the current list.
+              </p>
+              <BackupRestore onRestored={() => window.location.reload()} />
+            </section>
           </section>
         )}
       </main>

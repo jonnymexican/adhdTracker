@@ -404,7 +404,31 @@ body {
 
 .reflection-summary p { margin: 0.4rem 0; display: flex; gap: 1rem; flex-wrap: wrap; }
 
-.hint-line { color: #8f88a8; font-size: 0.88rem; }
+/* Data vault (backup/restore) */
+.data-vault {
+  margin-top: 2rem;
+  border: 1px dashed #3d3358;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.backup-restore {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.backup-status {
+  flex-basis: 100%;
+  margin: 0.4rem 0 0;
+  font-size: 0.86rem;
+  color: #7fce7f;
+}
+
+.backup-status-error {
+  color: #f2766b;
+}
 
 .app-footer {
   margin-top: 3rem;
