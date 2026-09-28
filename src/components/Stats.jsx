@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { prettyDate } from '../tasksLogic.js';
+import { buildStreakText, shareToFacebook, shareToWhatsApp, shareNative, hasNativeShare } from '../social.js';
 
 export default function Stats({ stats }) {
   const max = Math.max(1, ...stats.last7.map((d) => d.completed));
@@ -33,6 +34,34 @@ export default function Stats({ stats }) {
           </div>
         ))}
       </div>
+      {stats.streak >= 2 && (
+        <div className="brag-row" aria-label="Share your streak">
+          <span className="brag-label">Flex the streak:</span>
+          <button
+            type="button"
+            className="brag-btn"
+            onClick={() => shareToFacebook(buildStreakText(stats))}
+          >
+            📘 Facebook
+          </button>
+          <button
+            type="button"
+            className="brag-btn"
+            onClick={() => shareToWhatsApp(buildStreakText(stats))}
+          >
+            💬 WhatsApp
+          </button>
+          {hasNativeShare() && (
+            <button
+              type="button"
+              className="brag-btn"
+              onClick={() => shareNative({ title: 'adhdTracker', text: buildStreakText(stats) })}
+            >
+              📤 More…
+            </button>
+          )}
+        </div>
+      )}
     </section>
   );
 }
