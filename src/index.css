@@ -436,3 +436,41 @@ body {
   color: #55506b;
   font-size: 0.82rem;
 }
+
+/* Cross-app nav pills (shared with the other fleet apps) */
+.app-nav {
+  position: fixed;
+  top: 0.6rem;
+  left: 0.6rem;
+  display: flex;
+  gap: 0.25rem;
+  z-index: 10;
+  background: rgba(28, 21, 48, 0.75);
+  border: 1px solid rgba(236, 232, 246, 0.14);
+  border-radius: 999px;
+  padding: 0.25rem 0.4rem;
+  backdrop-filter: blur(8px);
+}
+
+.app-nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  opacity: 0.72;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.app-nav-link:hover {
+  opacity: 1;
+  background: rgba(236, 232, 246, 0.08);
+}
+
+.app-nav-link.current {
+  opacity: 1;
+  background: rgba(167, 139, 250, 0.22);
+}

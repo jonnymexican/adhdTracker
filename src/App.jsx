@@ -5,6 +5,7 @@ import TaskCard from './components/TaskCard.jsx';
 import AddTaskForm from './components/AddTaskForm.jsx';
 import Stats from './components/Stats.jsx';
 import BackupRestore from './components/BackupRestore.jsx';
+import AppNav from './components/AppNav.jsx';
 
 const VIEWS = [
   { id: 'today', label: 'Today' },
@@ -27,6 +28,7 @@ export default function App() {
 
   return (
     <div className="app">
+      <AppNav current="https://jonnymexican.github.io/adhdTracker/" />
       <header className="app-header">
         <h1>adhdTracker</h1>
         <p className="tagline">No outcome, no checkmark.</p>
