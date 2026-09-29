@@ -14,8 +14,92 @@ const VIEWS = [
   { id: 'stats', label: 'Progress' },
 ];
 
+function VaultSyncSection({ tracker }) {
+  const [url, setUrl] = React.useState('');
+  const [code, setCode] = React.useState('');
+  const [busy, setBusy] = React.useState(false);
+  const [error, setError] = React.useState('');
+  const joined = tracker.vaultInfo;
+  const statusLabel = {
+    idle: '',
+    syncing: 'Syncing…',
+    ok: 'Synced',
+    error: `Sync problem (${tracker.vaultError})`,
+  }[tracker.vaultStatus] || '';
+
+  const join = async (e) => {
+    e.preventDefault();
+    setError('');
+    setBusy(true);
+    try {
+      await tracker.joinVault(url, code);
+      setUrl('');
+      setCode('');
+    } catch (err) {
+      const msgs = {
+        network: 'Could not reach the vault URL.',
+        unauthorized: 'Wrong tracker code for that vault.',
+        bad_url: 'The vault URL must start with https://',
+        bad_code: 'Codes are 4-40 letters, digits or dashes.',
+        bad_response: 'That URL is not a bureau vault.',
+      };
+      setError(msgs[err.code] || `Join failed (${err.code})`);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <section className="vault-zone" aria-label="Task sync">
+      <h3 className="sub-title">Sync across devices</h3>
+      <p className="hint-line">
+        Optional: keep your tasks in sync between your own devices via your
+        bureau-vault worker. Use a private tracker code — anyone with it can read
+        and edit this task list.
+      </p>
+      {joined ? (
+        <div className="vault-status-row">
+          <span className={`vault-dot vault-${tracker.vaultStatus}`} aria-hidden="true" />
+          <span>
+            Syncing as <strong>{joined.code}</strong> · {statusLabel}
+          </span>
+          <button type="button" className="btn-secondary btn-small" onClick={tracker.leaveVault}>
+            Stop syncing
+          </button>
+        </div>
+      ) : (
+        <form className="vault-form" onSubmit={join}>
+          <input
+            className="form-input"
+            type="url"
+            placeholder="Vault URL (https://…workers.dev)"
+            aria-label="Vault URL"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            required
+          />
+          <input
+            className="form-input"
+            type="text"
+            placeholder="Tracker code"
+            aria-label="Tracker code"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            required
+          />
+          <button type="submit" className="btn-primary" disabled={busy || !url.trim() || !code.trim()}>
+            {busy ? 'Joining…' : 'Start syncing'}
+          </button>
+        </form>
+      )}
+      {error && <p className="form-error" role="alert">{error}</p>}
+    </section>
+  );
+}
+
 export default function App() {
-  const { tasks, addTask, updateTask, deleteTask, completeTask } = useTasks();
+  const tracker = useTasks();
+  const { tasks, addTask, updateTask, deleteTask, completeTask } = tracker;
   const [view, setView] = React.useState('today');
   const today = todayStr();
 
@@ -200,6 +284,8 @@ export default function App() {
               </p>
               <BackupRestore onRestored={() => window.location.reload()} />
             </section>
+
+            <VaultSyncSection tracker={tracker} />
           </section>
         )}
       </main>
